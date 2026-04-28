@@ -1,14 +1,13 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import '../../App.css'
+import {Routing} from "@/common/routing/Routing.tsx";
 
 function App() {
 
 
   return (
     <>
-      <h1>App</h1>
+        <h1>hello</h1>
+      <Routing/>
     </>
   )
 }
