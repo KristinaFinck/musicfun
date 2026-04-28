@@ -1,5 +1,7 @@
 import '../../App.css'
-import {Routing} from "@/common/routing/Routing.tsx";
+import {Routing} from "@/common/routing";
+
+
 
 function App() {
 
