@@ -1,5 +1,6 @@
 import '../../App.css'
 import {Routing} from "@/common/routing";
+import {Header} from "@/common/components/Header/Header.tsx";
 
 
 
@@ -8,7 +9,7 @@ function App() {
 
   return (
     <>
-        <h1>hello</h1>
+        <Header/>
       <Routing/>
     </>
   )
