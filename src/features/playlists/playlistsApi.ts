@@ -19,10 +19,7 @@ export const playlistsApi = createApi({
     // (например `get`, `post`, `put`, `patch`, `delete`)
     endpoints: build => ({
         fetchPlaylists: build.query<PlaylistsResponse, FetchPlaylistsArgs>({
-            query: () => ({
-                method: 'get',
-                url: 'playlists',
-            }),
+            query: () => `playlists`,
         }),
     }),
 })

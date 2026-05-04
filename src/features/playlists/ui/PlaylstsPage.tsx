@@ -1,23 +1,19 @@
-// export const PlaylistsPage = () => {
-//     return (
-//         <div>
-//             <h1> Playlists page </h1>
-//         </div>
-//     )
-// }
-import { useFetchPlaylistsQuery } from '@/features/playlists/playlistsApi'
+import {useFetchPlaylistsQuery} from "@/features/playlists/playlistsApi.ts";
+import s from "./PlaylistsPage.module.css"
 
 export const PlaylistsPage = () => {
     const { data } = useFetchPlaylistsQuery()
 
     return (
-        <div>
+        <div className={s.container}>
             <h1>Playlists page</h1>
-            <div>
+            <div className={s.items}>
                 {data?.data.map(playlist => {
                     return (
-                        <div key={playlist.id}>
+                        <div className={s.item} key={playlist.id}>
                             <div>title: {playlist.attributes.title}</div>
+                            <div>description: {playlist.attributes.description}</div>
+                            <div>userName: {playlist.attributes.user.name}</div>
                         </div>
                     )
                 })}
