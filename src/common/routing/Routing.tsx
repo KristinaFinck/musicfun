@@ -3,7 +3,7 @@ import {MainPage} from "@/app/ui/main-page/MainPage.tsx";
 import {TracksPage} from "@/features/tracks/ui/TracksPage.tsx";
 import {ProfilePage} from "@/features/auth/ui/ProfilePage.tsx";
 import {PageNotFound} from "@/common/components/PageNotFound";
-import {PlaylistsPage} from "@/features/playlists/ui/PlaylstsPage.tsx"
+import {PlaylistsPage} from "@/features/playlists/ui/PlayListsPage/PlaylstsPage.tsx"
 
 export const Path = {
     Main: '/',

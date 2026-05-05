@@ -1,6 +1,6 @@
 // Во избежание ошибок импорт должен быть из `@reduxjs/toolkit/query/react`
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import {FetchPlaylistsArgs, PlaylistsResponse} from "@/features/playlists/playlistsApi.types.ts";
+import type {CreatePlaylistArgs, PlaylistData, PlaylistsResponse} from "@/features/playlists/playlistsApi.types.ts";
 
 // `createApi` - функция из `RTK Query`, позволяющая создать объект `API`
 // для взаимодействия с внешними `API` и управления состоянием приложения
@@ -13,17 +13,35 @@ export const playlistsApi = createApi({
         headers: {
             'API-KEY': import.meta.env.VITE_API_KEY,
         },
+        prepareHeaders: headers => {
+            headers.set('Authorization', `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`)
+            return headers
+        },
     }),
     // `endpoints` - метод, возвращающий объект с эндпоинтами для `API`, описанными
     // с помощью функций, которые будут вызываться при вызове соответствующих методов `API`
     // (например `get`, `post`, `put`, `patch`, `delete`)
     endpoints: build => ({
-        fetchPlaylists: build.query<PlaylistsResponse, FetchPlaylistsArgs>({
+        fetchPlaylists: build.query<PlaylistsResponse, void>({
             query: () => `playlists`,
+        }),
+
+        createPlaylist: build.mutation<{ data: PlaylistData }, CreatePlaylistArgs>({
+            query: body => ({
+                url: 'playlists',
+                method: 'POST',
+                body: {
+                    data: {
+                        type: 'playlists' as const,
+                        attributes: body,
+                    },
+                },
+            }),
         }),
     }),
 })
 
+
 // `createApi` создает объект `API`, который содержит все эндпоинты в виде хуков,
 // определенные в свойстве `endpoints`
-export const { useFetchPlaylistsQuery } = playlistsApi
+export const { useFetchPlaylistsQuery, useCreatePlaylistMutation } = playlistsApi
