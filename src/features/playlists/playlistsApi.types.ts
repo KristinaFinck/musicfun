@@ -51,3 +51,8 @@ export type CreatePlaylistArgs = {
     tracksCount: number
     duration: number
 }
+export type UpdatePlaylistArgs = {
+    title: string
+    description: string
+    tagIds: string[]
+}
