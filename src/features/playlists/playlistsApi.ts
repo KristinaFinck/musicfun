@@ -1,7 +1,11 @@
 // Во избежание ошибок импорт должен быть из `@reduxjs/toolkit/query/react`
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type {CreatePlaylistArgs, PlaylistData, PlaylistsResponse} from "@/features/playlists/playlistsApi.types.ts";
-import {UpdatePlaylistArgs} from "@/features/playlists/playlistsApi.types.ts";
+import type {
+    CreatePlaylistArgs,
+    PlaylistData,
+    PlaylistsResponse,
+    UpdatePlaylistArgs
+} from "@/features/playlists/playlistsApi.types.ts";
 
 // `createApi` - функция из `RTK Query`, позволяющая создать объект `API`
 // для взаимодействия с внешними `API` и управления состоянием приложения
@@ -19,15 +23,20 @@ export const playlistsApi = createApi({
             return headers
         },
     }),
+
+    tagTypes: ['Playlist'],
     // `endpoints` - метод, возвращающий объект с эндпоинтами для `API`, описанными
     // с помощью функций, которые будут вызываться при вызове соответствующих методов `API`
     // (например `get`, `post`, `put`, `patch`, `delete`)
     endpoints: build => ({
         fetchPlaylists: build.query<PlaylistsResponse, void>({
             query: () => `playlists`,
+            providesTags: ['Playlist'],
         }),
 
-        createPlaylist: build.mutation<{ data: PlaylistData }, CreatePlaylistArgs>({
+        createPlaylist: build.mutation<{
+            data: PlaylistData },
+            CreatePlaylistArgs>({
             query: body => ({
                 url: 'playlists',
                 method: 'POST',
@@ -38,12 +47,14 @@ export const playlistsApi = createApi({
                     },
                 },
             }),
+            invalidatesTags: ['Playlist'],
         }),
         deletePlaylist: build.mutation<void, string>({
             query: playlistId => ({
                 url: `playlists/${playlistId}`,
                 method: 'DELETE',
             }),
+            invalidatesTags: ['Playlist'],
         }),
         updatePlaylist: build.mutation<void, { playlistId: string, body: UpdatePlaylistArgs}>({
             query: ({playlistId, body}) => ({
@@ -51,6 +62,7 @@ export const playlistsApi = createApi({
                 method: 'PUT',
                 body,
             }),
+            invalidatesTags: ['Playlist'],
         }),
     }),
 })
