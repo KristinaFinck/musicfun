@@ -6,10 +6,11 @@ import type {
     PlaylistsResponse,
     UpdatePlaylistArgs
 } from "@/features/playlists/playlistsApi.types.ts";
+import {baseApi} from "@/app/baseApi.ts";
 
 // `createApi` - функция из `RTK Query`, позволяющая создать объект `API`
 // для взаимодействия с внешними `API` и управления состоянием приложения
-export const playlistsApi = createApi({
+export const playlistsApi =  baseApi.injectEndpoints({
     // `reducerPath` - имя куда будут сохранены состояние и экшены для этого `API`
     reducerPath: 'playlistsApi',
     // `baseQuery` - конфигурация для `HTTP-клиента`, который будет использоваться для отправки запросов
