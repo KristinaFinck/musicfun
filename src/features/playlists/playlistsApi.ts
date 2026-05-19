@@ -7,6 +7,7 @@ import type {
     UpdatePlaylistArgs
 } from "@/features/playlists/playlistsApi.types.ts";
 import {baseApi} from "@/app/baseApi.ts";
+import {Images} from "@/common/types";
 
 // `createApi` - функция из `RTK Query`, позволяющая создать объект `API`
 // для взаимодействия с внешними `API` и управления состоянием приложения
@@ -63,6 +64,19 @@ export const playlistsApi =  baseApi.injectEndpoints({
                 method: 'PUT',
                 body,
             }),
+            invalidatesTags: ['Playlist'],
+        }),
+
+        uploadPlaylistCover: build.mutation<Images, { playlistId: string; file: File }>({
+            query: ({ playlistId, file }) => {
+                const formData = new FormData()
+                formData.append('file', file)
+                return {
+                    url: `playlists/${playlistId}/images/main`,
+                    method: 'post',
+                    body: formData,
+                }
+            },
             invalidatesTags: ['Playlist'],
         }),
     }),
