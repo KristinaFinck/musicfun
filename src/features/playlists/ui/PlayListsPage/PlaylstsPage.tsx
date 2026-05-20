@@ -4,11 +4,11 @@ import {
     useUpdatePlaylistMutation
 } from "@/features/playlists/playlistsApi.ts";
 import s from "./PlaylistsPage.module.css"
-import {CreatePlaylistForm} from "@/features/playlists/ui/PlayListsPage/CreatePlaylistForm/CreatePlaylistForm.tsx";
+import {CreatePlaylistForm} from "@/features/playlists/ui/CreatePlaylistForm/CreatePlaylistForm.tsx";
 import {useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {PlaylistData, UpdatePlaylistArgs} from "@/features/playlists/playlistsApi.types.ts";
-import {PlaylistItem} from "@/features/playlists/ui/PlayListsPage/PlaylistItem.tsx";
+import {PlaylistItem} from "@/features/playlists/ui/PlaylistItem/PlaylistItem.tsx";
 
 
 
