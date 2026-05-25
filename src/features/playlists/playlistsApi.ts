@@ -1,7 +1,7 @@
 // Во избежание ошибок импорт должен быть из `@reduxjs/toolkit/query/react`
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import type {
-    CreatePlaylistArgs,
+    CreatePlaylistArgs, FetchPlaylistsArgs,
     PlaylistData,
     PlaylistsResponse,
     UpdatePlaylistArgs
@@ -31,8 +31,8 @@ export const playlistsApi =  baseApi.injectEndpoints({
     // с помощью функций, которые будут вызываться при вызове соответствующих методов `API`
     // (например `get`, `post`, `put`, `patch`, `delete`)
     endpoints: build => ({
-        fetchPlaylists: build.query<PlaylistsResponse, void>({
-            query: () => `playlists`,
+        fetchPlaylists: build.query<PlaylistsResponse, FetchPlaylistsArgs>({
+            query: params => ({ url: `playlists`, params }),
             providesTags: ['Playlist'],
         }),
 
