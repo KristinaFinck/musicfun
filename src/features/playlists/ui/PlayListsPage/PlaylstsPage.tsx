@@ -9,12 +9,14 @@ import {useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {PlaylistData, UpdatePlaylistArgs} from "@/features/playlists/playlistsApi.types.ts";
 import {PlaylistItem} from "@/features/playlists/ui/PlaylistItem/PlaylistItem.tsx";
+import {useDebounceValue} from "@/common/hooks/useDebounceValue.ts";
 
 
 
 export const PlaylistsPage = () => {
     const [playlistId, setPlaylistId] = useState<string | null>(null)
     const [search, setSearch] = useState('')
+    const debounceSearch = useDebounceValue(search)
     const { register, handleSubmit, reset } = useForm<UpdatePlaylistArgs>()
     const { data, isLoading } = useFetchPlaylistsQuery({ search })
 
