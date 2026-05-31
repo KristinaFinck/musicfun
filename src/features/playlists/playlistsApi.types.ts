@@ -56,3 +56,10 @@ export type UpdatePlaylistArgs = {
     description: string
     tagIds: string[]
 }
+
+export type PlaylistMeta = {
+    page: number
+    pageSize: number
+    totalCount: number
+    pagesCount: number
+}
