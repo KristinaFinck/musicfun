@@ -1,11 +1,10 @@
 import {
     useDeletePlaylistMutation,
     useFetchPlaylistsQuery,
-    useUpdatePlaylistMutation
 } from "@/features/playlists/playlistsApi.ts";
 import s from "./PlaylistsPage.module.css"
 import {CreatePlaylistForm} from "@/features/playlists/ui/CreatePlaylistForm/CreatePlaylistForm.tsx";
-import {useState} from "react";
+import {ChangeEvent, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {PlaylistData, UpdatePlaylistArgs} from "@/features/playlists/playlistsApi.types.ts";
 import {PlaylistItem} from "@/features/playlists/ui/PlaylistItem/PlaylistItem.tsx";
@@ -52,6 +51,10 @@ export const PlaylistsPage = () => {
         setPageSize(size)
         setCurrentPage(1)
     }
+    const searchPlaylistHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.currentTarget.value)
+        setCurrentPage(1)
+    }
     return (
         <div className={s.container}>
             <h1>Playlists page</h1>
@@ -59,10 +62,11 @@ export const PlaylistsPage = () => {
             <input
                 type="search"
                 placeholder={'Search playlist by title'}
-                onChange={e => setSearch(e.currentTarget.value)}
+                onChange={searchPlaylistHandler}
             />
             <div className={s.items}>
                 {!data?.data.length && !isLoading && <h2>Playlists not found</h2>}
+
                 {data?.data.map(playlist => {
                     const isEditing = playlistId === playlist.id
 
@@ -83,19 +87,21 @@ export const PlaylistsPage = () => {
                                     editPlaylist={editPlaylistHandler}
                                 />
                             )}
-                            <Pagination
-                                currentPage={currentPage}
-                                setCurrentPage={setCurrentPage}
-                                pagesCount={data?.meta.pagesCount || 1}
-                                pageSize={pageSize}
-                                changePageSize={changePageSizeHandler}
-                            />
                         </div>
                     )
                 })}
             </div>
-        </div>
+
+                    <Pagination
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        pagesCount={data?.meta.pagesCount || 1}
+                        pageSize={pageSize}
+                        changePageSize={changePageSizeHandler}
+                    />
+                </div>
     )
+
 }
 
 
