@@ -1,6 +1,7 @@
-
 import s from './Pagination.module.css'
-import {getPaginationPages} from "@/common/utils/getPaginationPages.ts";
+import { getPaginationPages } from '@/common/utils/getPaginationPages.ts'
+import { PaginationControls } from './PaginationControls'
+import { PageSizeSelector } from './PageSizeSelector'
 
 type Props = {
     currentPage: number
@@ -10,50 +11,29 @@ type Props = {
     changePageSize: (size: number) => void
 }
 
-export const Pagination = ({ currentPage,
+export const Pagination = ({
+                               currentPage,
                                setCurrentPage,
                                pageSize,
                                changePageSize,
-                               pagesCount }: Props) => {
+                               pagesCount,
+                           }: Props) => {
     if (pagesCount <= 1) return null
 
     const pages = getPaginationPages(currentPage, pagesCount)
 
     return (
         <div className={s.container}>
-            <div className={s.pagination}>
-                {pages.map((page, idx) =>
-                        page === '...' ? (
-                            <span className={s.ellipsis} key={`ellipsis-${idx}`}>
-            ...
-          </span>
-                        ) : (
-                            <button
-                                key={page}
-                                className={
-                                    page === currentPage ? `${s.pageButton} ${s.pageButtonActive}` : s.pageButton
-                                }
-                                onClick={() => page !== currentPage && setCurrentPage(Number(page))}
-                                disabled={page === currentPage}
-                                type="button"
-                            >
-                                {page}
-                            </button>
-                        )
-                )}
-            </div>
+            <PaginationControls
+                pages={pages}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+            />
 
-            <label>
-                Show
-                <select value={pageSize} onChange={e => changePageSize(Number(e.target.value))}>
-                    {[2, 4, 8, 16, 32].map(size => (
-                        <option value={size} key={size}>
-                            {size}
-                        </option>
-                    ))}
-                </select>
-                per page
-            </label>
+            <PageSizeSelector
+                pageSize={pageSize}
+                changePageSize={changePageSize}
+            />
         </div>
     )
 }
