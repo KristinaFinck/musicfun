@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const baseApi = createApi({
     reducerPath: 'baseApi',
-    tagTypes: ['Playlist'],
+    tagTypes: ['Playlist', 'Auth'],
     refetchOnFocus: true,
     refetchOnReconnect: true,
     keepUnusedDataFor: 5,
@@ -11,6 +11,7 @@ export const baseApi = createApi({
         headers: {
             'API-KEY': import.meta.env.VITE_API_KEY,
         },
+
         prepareHeaders: headers => {
             headers.set('Authorization', `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`)
             return headers

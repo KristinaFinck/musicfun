@@ -1,3 +1,6 @@
+import {MeResponse} from "@/features/auth/api/authApi.types.ts";
+import {baseApi} from "@/app/baseApi.ts";
+
 export const authApi = baseApi.injectEndpoints({
     endpoints: build => ({
         getMe: build.query<MeResponse, void>({
