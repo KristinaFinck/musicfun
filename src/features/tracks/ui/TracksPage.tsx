@@ -1,14 +1,19 @@
-import { useFetchTracksInfiniteQuery } from './../api/trackApi.ts'
-import s from './../ui/TrackPage.module.css'
-
+import {useFetchTracksInfiniteQuery} from "@/features/tracks/api/trackApi.ts";
+import s from "./TrackPage.module.css"
 export const TracksPage = () => {
-    const { data } = useFetchTracksInfiniteQuery({ paginationType: 'cursor', pageSize: 5 })
+    const { data, isLoading, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } =
+        useFetchTracksInfiniteQuery()
 
-    const pages = data?.pages.flatMap((page) => page.data) || []
+    const pages = data?.pages.flatMap(page => page.data) || []
+
+    const loadMoreHandler = () => {
+        if (hasNextPage && !isFetching) {
+            fetchNextPage()
+        }
+    }
 
     return (
         <div>
-            <h1>Tracks page</h1>
             <div className={s.list}>
                 {pages.map(track => {
                     const { title, user, attachments } = track.attributes
@@ -24,6 +29,18 @@ export const TracksPage = () => {
                     )
                 })}
             </div>
+
+            {!isLoading && (
+                <>
+                    {hasNextPage ? (
+                        <button onClick={loadMoreHandler} disabled={isFetching}>
+                            {isFetchingNextPage ? 'Loading...' : 'Load More'}
+                        </button>
+                    ) : (
+                        <p>Nothing more to load</p>
+                    )}
+                </>
+            )}
         </div>
     )
 }
