@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
-import {playlistsApi} from "@/features/playlists/playlistsApi.ts";
 import {baseApi} from "@/app/baseApi.ts";
 
 

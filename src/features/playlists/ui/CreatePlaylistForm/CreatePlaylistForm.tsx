@@ -1,6 +1,6 @@
 import {SubmitHandler, useForm} from "react-hook-form";
-import type {CreatePlaylistArgs} from "@/features/playlists/playlistsApi.types.ts";
-import {useCreatePlaylistMutation} from "@/features/playlists/playlistsApi.ts";
+import type {CreatePlaylistArgs} from "@/features/playlists/api/playlistsApi.types.ts";
+import {useCreatePlaylistMutation} from "@/features/playlists/api/playlistsApi.ts";
 
 export const CreatePlaylistForm = () => {
     const { register, handleSubmit, reset } = useForm<CreatePlaylistArgs>()

@@ -1,4 +1,4 @@
-import {useDeletePlaylistCoverMutation, useUploadPlaylistCoverMutation} from "@/features/playlists/playlistsApi.ts";
+import {useDeletePlaylistCoverMutation, useUploadPlaylistCoverMutation} from "@/features/playlists/api/playlistsApi.ts";
 import {ChangeEvent} from "react";
 import defaultCover from "../../../../../assets/images/default-playlist-cover.png"
 import {Images} from "@/common/types";

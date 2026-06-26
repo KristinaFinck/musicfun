@@ -1,5 +1,7 @@
 import {useFetchTracksInfiniteQuery} from "@/features/tracks/api/trackApi.ts";
 import {useInfiniteScroll} from "@/common/hooks/useInfiniteScroll.ts";
+import {TracksList} from "@/features/tracks/TrackList/TrackList.tsx";
+import {LoadingTrigger} from "@/features/tracks/TrackList/LoadingTrigger.tsx";
 
 export const TracksPage = () => {
     const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } =

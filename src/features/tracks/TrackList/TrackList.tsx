@@ -1,5 +1,5 @@
-import type { TrackData } from '../../../api/tracksApi.types.ts'
-import s from './TracksList.module.css'
+import type { TrackData } from '../api/tracksApi.types.ts'
+import s from '../TrackList/TrackList.module.css'
 
 type Props = {
     tracks: TrackData[]

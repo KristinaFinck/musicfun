@@ -1,6 +1,6 @@
 import {
     useFetchPlaylistsQuery,
-} from "@/features/playlists/playlistsApi.ts";
+} from "@/features/playlists/api/playlistsApi.ts";
 import s from "./PlaylistsPage.module.css"
 import {CreatePlaylistForm} from "@/features/playlists/ui/CreatePlaylistForm/CreatePlaylistForm.tsx";
 import {ChangeEvent, useState} from "react";

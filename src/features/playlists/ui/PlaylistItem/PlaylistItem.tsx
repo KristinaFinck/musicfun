@@ -1,4 +1,4 @@
-import {PlaylistData} from "@/features/playlists/playlistsApi.types.ts";
+import {PlaylistData} from "@/features/playlists/api/playlistsApi.types.ts";
 import {PlaylistCover} from "@/features/playlists/ui/PlaylistItem/PlaylistCover/PlaylistsCover.tsx";
 import {PlaylistDescription} from "@/features/playlists/ui/PlaylistItem/PlaylistDescription/PlaylistDescription.tsx";
 

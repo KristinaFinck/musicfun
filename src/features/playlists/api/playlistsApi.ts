@@ -5,7 +5,7 @@ import type {
     PlaylistData,
     PlaylistsResponse,
     UpdatePlaylistArgs
-} from "@/features/playlists/playlistsApi.types.ts";
+} from "@/features/playlists/api/playlistsApi.types.ts";
 import {baseApi} from "@/app/baseApi.ts";
 import {Images} from "@/common/types";
 
