@@ -3,10 +3,11 @@ import {
 } from "@/features/playlists/api/playlistsApi.ts";
 import s from "./PlaylistsPage.module.css"
 import {CreatePlaylistForm} from "@/features/playlists/ui/CreatePlaylistForm/CreatePlaylistForm.tsx";
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {useDebounceValue} from "@/common/hooks/useDebounceValue.ts";
 import {Pagination} from "@/common/components/Pagination/Pagination.tsx";
 import {PlaylistsList} from "@/features/playlists/ui/PlaylistsList/PlaylistsList.tsx";
+import {toast} from "react-toastify";
 
 
 export const PlaylistsPage = () => {
@@ -16,11 +17,23 @@ export const PlaylistsPage = () => {
     const [search, setSearch] = useState('')
     const debounceSearch = useDebounceValue(search)
 
-    const { data, isLoading } = useFetchPlaylistsQuery({
+    const { data, isLoading, error, isError } = useFetchPlaylistsQuery({
         search: debounceSearch,
         pageNumber: currentPage,
         pageSize,
     })
+
+    useEffect(() => {
+        if (!error) return
+        if ('status' in error) {
+            // FetchBaseQueryError
+            const errMsg = 'error' in error ? error.error : (error.data as { error: string }).error
+            toast(errMsg, { type: 'error', theme: 'colored' })
+        } else {
+            // SerializedError
+            toast(error.message || 'Some error occurred', { type: 'error', theme: 'colored' })
+        }
+    }, [error])
     const changePageSizeHandler = (size: number) => {
         setPageSize(size)
         setCurrentPage(1)
