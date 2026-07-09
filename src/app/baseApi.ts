@@ -9,7 +9,7 @@ export const baseApi = createApi({
     refetchOnReconnect: true,
     keepUnusedDataFor: 5,
     baseQuery: async (args, api, extraOptions) => {
-        await new Promise(resolve => setTimeout(resolve, 2000)) // delay
+      //  await new Promise(resolve => setTimeout(resolve, 2000)) // delay
         const result = await fetchBaseQuery({
             baseUrl: import.meta.env.VITE_BASE_URL,
             headers: {
@@ -20,10 +20,19 @@ export const baseApi = createApi({
             headers.set('Authorization', `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`)
             return headers
         },
+            responseHandler: () => {
+                throw new Error('PARSING_ERROR')
+            },
         })(args, api, extraOptions)
 
     if ('error' in result && result.error) {
         switch (result.error.status) {
+            case 'FETCH_ERROR':
+            case 'PARSING_ERROR':
+            case 'CUSTOM_ERROR':
+            case 'TIMEOUT_ERROR':
+                toast(result.error.error, { type: 'error', theme: 'colored' })
+                break
 
         case 404:
             if (isErrorWithProperty(result.error.data, 'error')) {
