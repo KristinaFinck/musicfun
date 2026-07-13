@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {toast} from "react-toastify";
 import { isErrorWithProperty} from "@/common/utils";
 import {isErrorWithDetailArray} from "@/common/utils/isErrorWithDetailArray.ts";
+import {trimToMaxLength} from "@/common/utils/trimToMaxLength.ts";
 
 export const baseApi = createApi({
     reducerPath: 'baseApi',
@@ -36,13 +37,16 @@ export const baseApi = createApi({
                 toast(result.error.error, { type: 'error', theme: 'colored' })
                 break
 
+            case 400:
             case 403:
                 if (isErrorWithDetailArray(result.error.data)) {
-                    toast(result.error.data.errors[0].detail, { type: "error", theme: "colored" })
+                    toast(trimToMaxLength(result.error.data.errors[0].detail, { type: "error", theme: "colored" }))
                 } else {
                     toast(JSON.stringify(result.error.data), { type: "error", theme: "colored" })
                 }
                 break
+
+            case 401:
         case 404:
             if (isErrorWithProperty(result.error.data, 'error')) {
                 toast(result.error.data.error, { type: 'error', theme: 'colored' })
