@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {toast} from "react-toastify";
 import { isErrorWithProperty} from "@/common/utils";
+import {isErrorWithDetailArray} from "@/common/utils/isErrorWithDetailArray.ts";
 
 export const baseApi = createApi({
     reducerPath: 'baseApi',
@@ -20,12 +21,13 @@ export const baseApi = createApi({
             headers.set('Authorization', `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`)
             return headers
         },
-            responseHandler: () => {
-                throw new Error('PARSING_ERROR')
-            },
+            // responseHandler: () => {
+            //     throw new Error('PARSING_ERROR')
+            // },
         })(args, api, extraOptions)
 
     if ('error' in result && result.error) {
+        console.log(result.error)
         switch (result.error.status) {
             case 'FETCH_ERROR':
             case 'PARSING_ERROR':
@@ -34,6 +36,13 @@ export const baseApi = createApi({
                 toast(result.error.error, { type: 'error', theme: 'colored' })
                 break
 
+            case 403:
+                if (isErrorWithDetailArray(result.error.data)) {
+                    toast(result.error.data.errors[0].detail, { type: "error", theme: "colored" })
+                } else {
+                    toast(JSON.stringify(result.error.data), { type: "error", theme: "colored" })
+                }
+                break
         case 404:
             if (isErrorWithProperty(result.error.data, 'error')) {
                 toast(result.error.data.error, { type: 'error', theme: 'colored' })
