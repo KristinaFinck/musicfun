@@ -39,8 +39,11 @@ export const baseApi = createApi({
 
             case 400:
             case 403:
+                console.log(result.error.data)
                 if (isErrorWithDetailArray(result.error.data)) {
-                    toast(trimToMaxLength(result.error.data.errors[0].detail, { type: "error", theme: "colored" }))
+                    toast(trimToMaxLength(result.error.data.errors[0].detail),
+                        { type: "error", theme: "colored" }
+                    )
                 } else {
                     toast(JSON.stringify(result.error.data), { type: "error", theme: "colored" })
                 }
