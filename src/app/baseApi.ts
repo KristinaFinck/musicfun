@@ -39,7 +39,6 @@ export const baseApi = createApi({
 
             case 400:
             case 403:
-                console.log(result.error.data)
                 if (isErrorWithDetailArray(result.error.data)) {
                     toast(trimToMaxLength(result.error.data.errors[0].detail),
                         { type: "error", theme: "colored" }
@@ -49,8 +48,7 @@ export const baseApi = createApi({
                 }
                 break
 
-            case 401:
-        case 404:
+        case 404:  // ожидаем поле error
             if (isErrorWithProperty(result.error.data, 'error')) {
                 toast(result.error.data.error, { type: 'error', theme: 'colored' })
             } else {
@@ -58,7 +56,9 @@ export const baseApi = createApi({
             }
             break
 
+            case 401:
         case 429:
+            // ожидаем поле message
             // ✅ 1. Type Assertions
             // toast((result.error.data as { message: string }).message, { type: 'error', theme: 'colored' })
             // ✅ 2. JSON.stringify
