@@ -1,7 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {handleErrors} from "@/common/utils";
-import {isErrorWithDetailArray} from "@/common/utils/isErrorWithDetailArray.ts";
-import {trimToMaxLength} from "@/common/utils/trimToMaxLength.ts"
 
 export const baseApi = createApi({
     reducerPath: 'baseApi',
@@ -21,9 +19,7 @@ export const baseApi = createApi({
             headers.set('Authorization', `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`)
             return headers
         },
-            // responseHandler: () => {
-            //     throw new Error('PARSING_ERROR')
-            // },
+
         })(args, api, extraOptions)
 
     if ('error' in result && result.error) {
