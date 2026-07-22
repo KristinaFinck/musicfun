@@ -38,27 +38,39 @@ export const playlistsApi = baseApi.injectEndpoints({
         }),
 
         updatePlaylist: build.mutation<void, { playlistId: string; body: UpdatePlaylistArgs }>({
-            query: ({ playlistId, body }) => ({ url: `playlists/${playlistId}`, method: 'put', body }),
-            async onQueryStarted({ playlistId, body }, { dispatch, queryFulfilled }) {
-                const patchResult = dispatch(
-                    playlistsApi.util.updateQueryData(
-                        // название эндпоинта, в котором нужно обновить кэш
-                        'fetchPlaylists',
-                        // аргументы для эндпоинта
-                        { pageNumber: 1, pageSize: 2, search: '' },
-                        // `updateRecipe` - коллбэк для обновления закэшированного стейта мутабельным образом
-                        state => {
-                            const index = state.data.findIndex(playlist => playlist.id === playlistId)
-                            if (index !== -1) {
-                                state.data[index].attributes = { ...state.data[index].attributes, ...body }
-                            }
-                        }
+            query: ({ playlistId, body }) => ({ url: `playlists/${playlistId}`, method: 'PUT', body }),
+            async onQueryStarted({ playlistId, body }, { dispatch, queryFulfilled, getState}) {
+                const args = playlistsApi.util.selectCachedArgsForQuery(getState(), 'fetchPlaylists')
+
+                const patchResults: any[] = []
+
+                args.forEach(arg => {
+                    patchResults.push(
+                        dispatch(
+                            playlistsApi.util.updateQueryData(
+                                'fetchPlaylists',
+                                {
+                                    pageNumber: arg.pageNumber,
+                                    pageSize: arg.pageSize,
+                                    search: arg.search,
+                                },
+                                state => {
+                                    const index = state.data.findIndex(playlist => playlist.id === playlistId)
+                                    if (index !== -1) {
+                                        state.data[index].attributes = { ...state.data[index].attributes, ...body }
+                                    }
+                                }
+                            )
+                        )
                     )
-                )
+                })
+
                 try {
                     await queryFulfilled
                 } catch {
-                    patchResult.undo()
+                    patchResults.forEach(patchResult => {
+                        patchResult.undo()
+                    })
                 }
             },
             invalidatesTags: ['Playlist'],
@@ -95,5 +107,4 @@ export const {
     useUpdatePlaylistMutation,
     useUploadPlaylistCoverMutation,
     useDeletePlaylistCoverMutation,
-    useUpdatePlayListMutation
 } = playlistsApi
