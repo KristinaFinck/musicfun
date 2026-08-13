@@ -18,18 +18,23 @@ export const Login = () => {
         const receiveMessage = async (event: MessageEvent) => {
             if (event.origin !== import.meta.env.VITE_DOMAIN_ADDRESS) return
 
-            const { code } = event.data
+            const {code} = event.data
             if (!code) return
 
-            // Отписываемся от события, чтобы избежать обработки дублирующихся сообщений
-            window.removeEventListener('message', receiveMessage)
-            login({ code, redirectUri, rememberMe: false })
+                    // Отписываемся от события, чтобы избежать обработки дублирующихся сообщений
+                    window.removeEventListener('message', receiveMessage)
+                    login({ code, redirectUri, rememberMe: false })
+                }
+            //
+            //     // Подписываемся на сообщения из всплывающего окна
+            //     window.addEventListener('message', receiveMessage)
+            // }
+            // СНАЧАЛА начинаем слушать
+            window.addEventListener('message', receiveMessage)
+
+            // ПОТОМ открываем popup
+            window.open(url, 'oauthPopup', 'width=500, height=600')
         }
-
-        // Подписываемся на сообщения из всплывающего окна
-        window.addEventListener('message', receiveMessage)
-    }
-
     return (
         <button type={'button'} onClick={loginHandler}>
             login
