@@ -1,9 +1,11 @@
-import { baseApi } from '@/app/api/baseApi.ts'
-import { baseQuery } from '@/app/api/baseQuery.ts'
-import { AUTH_KEYS } from '@/common/constants'
-import { handleErrors, isTokens } from '@/common/utils'
+
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { Mutex } from 'async-mutex'
+import {baseQuery} from "@/app/baseQuery.ts";
+import {AUTH_KEYS} from "@/common/constants/constants.ts";
+import {handleErrors} from "@/common/utils";
+import {baseApi} from "@/app/baseApi.ts";
+import {isTokens} from "@/common/utils/isTokens.ts";
 
 // Создаём новый мьютекс для управления параллельными запросами на обновление токена
 const mutex = new Mutex()
@@ -42,6 +44,7 @@ export const baseQueryWithReauth: BaseQueryFn<
                 } else {
                     // Если обновление токена не удалось — выполняем выход из системы
                     // @ts-expect-error
+
                     api.dispatch(baseApi.endpoints.logout.initiate())
                 }
             } finally {
