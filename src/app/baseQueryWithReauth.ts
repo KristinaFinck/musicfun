@@ -29,6 +29,10 @@ export const baseQueryWithReauth: BaseQueryFn<
             const release = await mutex.acquire()
             try {
                 const refreshToken = localStorage.getItem(AUTH_KEYS.refreshToken)
+                if (!refreshToken) {
+                    return result
+                }
+                console.log('8. REFRESH HAS TOKEN:', Boolean(refreshToken))
 
                 const refreshResult = await baseQuery(
                     { url: '/auth/refresh', method: 'post', body: { refreshToken } },
@@ -44,7 +48,7 @@ export const baseQueryWithReauth: BaseQueryFn<
                 } else {
                     // Если обновление токена не удалось — выполняем выход из системы
                     // @ts-expect-error
-
+                    console.log('9. REFRESH FAILED -> LOGOUT')
                     api.dispatch(baseApi.endpoints.logout.initiate())
                 }
             } finally {
