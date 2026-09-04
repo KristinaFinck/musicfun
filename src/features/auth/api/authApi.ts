@@ -9,6 +9,7 @@ export const authApi = baseApi.injectEndpoints({
             query: () => 'auth/me',
             providesTags: ['Auth'],
         }),
+
         login: build.mutation<LoginResponse, LoginArgs>({
             query: payload => ({
                 url: `auth/login`,
@@ -16,7 +17,6 @@ export const authApi = baseApi.injectEndpoints({
                 body: { ...payload, accessTokenTTL: '15m'
                 },
             }),
-
             async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
                 console.log('5. LOGIN MUTATION STARTED')
                 const { data } = await queryFulfilled
@@ -32,6 +32,7 @@ export const authApi = baseApi.injectEndpoints({
                 dispatch(authApi.util.invalidateTags(['Auth']))
             },
         }),
+
         logout: build.mutation<void, void>({
             query: () => {
                 const refreshToken = localStorage.getItem(AUTH_KEYS.refreshToken)
