@@ -40,7 +40,9 @@ export const authApi = baseApi.injectEndpoints({
                 return { url: 'auth/logout', method: 'post', body: { refreshToken } }
             },
             async onQueryStarted(_args, { queryFulfilled, dispatch }) {
+                console.log('11. LOGOUT STARTED')
                 await queryFulfilled
+                console.log('12. LOGOUT SUCCESS')
                 localStorage.removeItem(AUTH_KEYS.accessToken)
                 localStorage.removeItem(AUTH_KEYS.refreshToken)
 

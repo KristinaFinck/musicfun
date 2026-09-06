@@ -12,7 +12,6 @@ import {toast} from "react-toastify";
 export const PlaylistsPage = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(2)
-
     const [search, setSearch] = useState('')
     const debounceSearch = useDebounceValue(search)
 
