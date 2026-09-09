@@ -1,7 +1,7 @@
 import type { RefObject } from 'react'
 
 type Props = {
-    observerRef: RefObject<HTMLDivElement | null>
+    observerRef: RefObject<HTMLDivElement>
     isFetchingNextPage: boolean
 }
 

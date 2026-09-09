@@ -1,18 +1,17 @@
 import type {
     CreatePlaylistArgs, FetchPlaylistsArgs,
     PlaylistData,
-    PlaylistsResponse,
     UpdatePlaylistArgs
 } from "@/features/playlists/api/playlistsApi.types.ts";
 import {baseApi} from "@/app/baseApi.ts";
 import {Images} from "@/common/types";
-import {playlistsResponseSchema} from "@/features/playlists/ model/schemas.ts";
+import {playlistsResponseSchema} from "@/features/playlists/model/schemas.ts";
 import {errorToast} from "@/common/utils/errorToast.ts";
 
 
 export const playlistsApi = baseApi.injectEndpoints({
     endpoints: build => ({
-        fetchPlaylists: build.query<PlaylistsResponse, FetchPlaylistsArgs>({
+        fetchPlaylists: build.query({
             query: (params: FetchPlaylistsArgs) => ({ url: `playlists`, params }),
             responseSchema: playlistsResponseSchema,
             catchSchemaFailure: err => {

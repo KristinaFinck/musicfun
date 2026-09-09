@@ -1,5 +1,5 @@
-import type { CurrentUserReaction } from '@/common/enums'
-import type { Images, User } from '@/common/types'
+
+import type {CurrentUserReaction, Images, User} from '@/common/types'
 
 export type FetchTracksResponse = {
     data: TrackData[]
