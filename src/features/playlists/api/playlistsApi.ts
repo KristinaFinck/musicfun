@@ -1,13 +1,12 @@
 import type {
-    CreatePlaylistArgs, FetchPlaylistsArgs,
-    PlaylistData,
+    CreatePlaylistArgs,
+    FetchPlaylistsArgs,
     UpdatePlaylistArgs
 } from "@/features/playlists/api/playlistsApi.types.ts";
 import {baseApi} from "@/app/baseApi.ts";
-import {Images} from "@/common/types";
-import {playlistsResponseSchema} from "@/features/playlists/model/schemas.ts";
+import {playlistCreateResponseSchema, playlistsResponseSchema} from "@/features/playlists/model/playlists.schemas.ts";
 import {errorToast} from "@/common/utils/errorToast.ts";
-
+import {imagesSchema} from "@/common/schemas";
 
 export const playlistsApi = baseApi.injectEndpoints({
     endpoints: build => ({
@@ -21,17 +20,13 @@ export const playlistsApi = baseApi.injectEndpoints({
             providesTags: ['Playlist'],
         }),
 
-        createPlaylist: build.mutation<{ data: PlaylistData }, CreatePlaylistArgs>({
-            query: body => ({
-                url: 'playlists',
-                method: 'POST',
-                body: {
-                    data: {
-                        type: 'playlists',
-                        attributes: body,
-                    },
-                },
-            }),
+        createPlaylist: build.mutation({
+            query: (body: CreatePlaylistArgs) => ({ url: 'playlists', method: 'post', body }),
+            responseSchema: playlistCreateResponseSchema,
+            catchSchemaFailure: err => {
+                errorToast('Zod error. Details in the console', err.issues)
+                return { status: 'CUSTOM_ERROR', error: 'Schema validation failed' }
+            },
             invalidatesTags: ['Playlist'],
         }),
 
@@ -82,8 +77,8 @@ export const playlistsApi = baseApi.injectEndpoints({
             invalidatesTags: ['Playlist'],
         }),
 
-        uploadPlaylistCover: build.mutation<Images, { playlistId: string; file: File }>({
-            query: ({ playlistId, file }) => {
+        uploadPlaylistCover: build.mutation({
+            query: ({ playlistId, file }: { playlistId: string; file: File }) => {
                 const formData = new FormData()
                 formData.append('file', file)
 
@@ -92,6 +87,11 @@ export const playlistsApi = baseApi.injectEndpoints({
                     method: 'POST',
                     body: formData,
                 }
+            },
+            responseSchema: imagesSchema,
+            catchSchemaFailure: err => {
+                errorToast('Zod error. Details in the console', err.issues)
+                return { status: 'CUSTOM_ERROR', error: 'Schema validation failed' }
             },
             invalidatesTags: ['Playlist'],
         }),
