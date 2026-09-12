@@ -3,3 +3,6 @@ export {isErrorWithProperty} from "./isErrorWithProperty.ts"
 export {isErrorWithDetailArray} from "./isErrorWithDetailArray.ts"
 export {trimToMaxLength} from "./trimToMaxLength.ts"
 export {handleErrors} from "./handleErrors.ts"
+export {withZodCatch} from "./withZodCatch.ts"
+
+

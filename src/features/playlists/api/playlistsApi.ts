@@ -5,28 +5,20 @@ import type {
 } from "@/features/playlists/api/playlistsApi.types.ts";
 import {baseApi} from "@/app/baseApi.ts";
 import {playlistCreateResponseSchema, playlistsResponseSchema} from "@/features/playlists/model/playlists.schemas.ts";
-import {errorToast} from "@/common/utils/errorToast.ts";
 import {imagesSchema} from "@/common/schemas";
+import {withZodCatch} from "@/common/utils/withZodCatch.ts";
 
 export const playlistsApi = baseApi.injectEndpoints({
     endpoints: build => ({
         fetchPlaylists: build.query({
             query: (params: FetchPlaylistsArgs) => ({ url: `playlists`, params }),
-            responseSchema: playlistsResponseSchema,
-            catchSchemaFailure: err => {
-                errorToast('Zod error. Details in the console', err.issues)
-                return { status: 'CUSTOM_ERROR', error: 'Schema validation failed' }
-            },
+            ...withZodCatch(playlistsResponseSchema),
             providesTags: ['Playlist'],
         }),
 
         createPlaylist: build.mutation({
             query: (body: CreatePlaylistArgs) => ({ url: 'playlists', method: 'post', body }),
-            responseSchema: playlistCreateResponseSchema,
-            catchSchemaFailure: err => {
-                errorToast('Zod error. Details in the console', err.issues)
-                return { status: 'CUSTOM_ERROR', error: 'Schema validation failed' }
-            },
+            ...withZodCatch(playlistCreateResponseSchema),
             invalidatesTags: ['Playlist'],
         }),
 
@@ -88,11 +80,7 @@ export const playlistsApi = baseApi.injectEndpoints({
                     body: formData,
                 }
             },
-            responseSchema: imagesSchema,
-            catchSchemaFailure: err => {
-                errorToast('Zod error. Details in the console', err.issues)
-                return { status: 'CUSTOM_ERROR', error: 'Schema validation failed' }
-            },
+            ...withZodCatch(imagesSchema),
             invalidatesTags: ['Playlist'],
         }),
 
