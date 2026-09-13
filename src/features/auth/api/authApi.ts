@@ -1,22 +1,26 @@
 import {LoginArgs, LoginResponse, MeResponse} from "@/features/auth/api/authApi.types.ts";
 import {baseApi} from "@/app/baseApi.ts";
 import {AUTH_KEYS} from "@/common/constants/constants.ts";
+import {loginResponseSchema, meResponseSchema} from "@/features/auth/model/auth.schemas.ts";
+import {withZodCatch} from "@/common/utils";
 
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: build => ({
-        getMe: build.query<MeResponse, void>({
+        getMe: build.query({
             query: () => 'auth/me',
+            ...withZodCatch(meResponseSchema),
             providesTags: ['Auth'],
         }),
 
-        login: build.mutation<LoginResponse, LoginArgs>({
+        login: build.mutation({
             query: payload => ({
                 url: `auth/login`,
                 method: 'post',
                 body: { ...payload, accessTokenTTL: '15m'
                 },
             }),
+            ...withZodCatch(loginResponseSchema),
             async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
                 console.log('5. LOGIN MUTATION STARTED')
                 const { data } = await queryFulfilled

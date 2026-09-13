@@ -6,7 +6,7 @@ export const baseApi = createApi({
     tagTypes: ['Playlist', 'Auth'],
     // refetchOnFocus: true,
     // refetchOnReconnect: true,
-    keepUnusedDataFor: 5,
+    // keepUnusedDataFor: 5,
     baseQuery: baseQueryWithReauth,
     endpoints: () => ({}),
 
