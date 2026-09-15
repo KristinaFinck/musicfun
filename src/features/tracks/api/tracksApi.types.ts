@@ -1,65 +1,26 @@
+import * as z from 'zod'
+import {
+    fetchTracksResponseSchema,
+    trackAttachmentSchema,
+    trackAttributesSchema,
+    trackDataSchema,
+    trackRelationshipsSchema,
+    tracksIncludedSchema,
+    tracksMetaSchema,
+} from "@/features/tracks/api/track.schema.ts";
 
-import type {CurrentUserReaction, Images, User} from '@/common/types'
+export type FetchTracksResponse = z.infer<typeof fetchTracksResponseSchema>
 
-export type FetchTracksResponse = {
-    data: TrackData[]
-    included: TracksIncluded[]
-    meta: TracksMeta
-}
+export type TrackData = z.infer<typeof trackDataSchema>
 
-export type TrackData = {
-    id: string
-    type: 'tracks'
-    attributes: TrackAttributes
-    relationships: TrackRelationships
-}
+export type TracksIncluded = z.infer<typeof tracksIncludedSchema>
+export type TracksMeta = z.infer<typeof tracksMetaSchema>
 
-export type TracksIncluded = {
-    id: string
-    type: 'artists'
-    attributes: {
-        name: string
-    }
-}
+export type TrackAttributes = z.infer<typeof trackAttributesSchema>
 
-export type TracksMeta = {
-    nextCursor: string | null
-    page: number
-    pageSize: number
-    totalCount: number | null
-    pagesCount: number | null
-}
+export type TrackRelationships = z.infer<typeof trackRelationshipsSchema>
 
-export type TrackAttributes = {
-    title: string
-    addedAt: string
-    attachments: TrackAttachment[]
-    images: Images
-    currentUserReaction: CurrentUserReaction
-    user: User
-    isPublished: boolean
-    publishedAt: string
-}
-
-export type TrackRelationships = {
-    artists: {
-        data: {
-            id: string
-            type: string
-        }[]
-    }
-}
-
-export type TrackAttachment = {
-    id: string
-    addedAt: string
-    updatedAt: string
-    version: number
-    url: string
-    contentType: string
-    originalName: string
-    fileSize: number
-}
+export type TrackAttachment = z.infer<typeof trackAttachmentSchema>
 
 // Arguments
 export type FetchTracksArgs = {
