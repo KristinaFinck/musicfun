@@ -4,26 +4,13 @@ import {currentUserReactionSchema, imagesSchema, userSchema} from "@/common/sche
 
 export const  trackAttachmentSchema = z.object({
     id: z.string(),
-    addedAt: z.string(),
-    updatedAt: z.string(),
-    version: z.number(),
-    url: z.string(),
+    addedAt: z.iso.datetime(),
+    updatedAt: z.iso.datetime(),
+    version: z.int().nonnegative(),
+    url: z.url(),
     contentType: z.string(),
     originalName: z.string(),
-    fileSize: z.number(),
-})
-
-export const trackAttributesSchema = z.object({
-    title: z.string(),
-    addedAt: z.string(),
-    likesCount: z.number(),
-    attachments: z.array(trackAttachmentSchema),
-    images: imagesSchema,
-    currentUserReaction: currentUserReactionSchema,
-    user: userSchema,
-    isPublished: z.boolean(),
-    publishedAt: z.string(),
-    duration: z.number(),
+    fileSize: z.int().nonnegative(),
 })
 
 export const trackRelationshipsSchema = z.object({
@@ -31,22 +18,37 @@ export const trackRelationshipsSchema = z.object({
         data: z.array(
             z.object({
                 id: z.string(),
-                type: z.string(),
+                type: z.literal('artists'),
             })
         ),
     }),
 })
+
+export const trackAttributesSchema = z.object({
+    title: z.string(),
+    addedAt: z.iso.datetime(),
+    likesCount: z.number(),
+    attachments: z.array(trackAttachmentSchema),
+    images: imagesSchema,
+    currentUserReaction: currentUserReactionSchema,
+    user: userSchema,
+    isPublished: z.boolean(),
+    publishedAt: z.iso.datetime(),
+    duration: z.number(),
+})
+
+
 export const tracksMetaSchema = z.object({
-        nextCursor:z.nullable(z.string()),
-        page: z.number(),
-        pageSize: z.number(),
-        totalCount: z.nullable(z.number()),
-        pagesCount: z.nullable(z.number()),
+    nextCursor: z.string().nullable(),
+    page: z.int().positive(),
+    pageSize: z.int().positive(),
+    totalCount: z.int().positive().nullable(),
+    pagesCount: z.int().positive().nullable(),
     })
 
 export const tracksIncludedSchema = z.object({
     id: z.string(),
-    type: z.string(),
+    type:z.literal('artists'),
     attributes: z.object({
         name: z.string(),
     })
