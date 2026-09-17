@@ -8,6 +8,8 @@ import {playlistCreateResponseSchema, playlistsResponseSchema} from "@/features/
 import {imagesSchema} from "@/common/schemas";
 import {withZodCatch} from "@/common/utils/withZodCatch.ts";
 import { io, type Socket } from 'socket.io-client'
+import {subscribeToEvent} from "@/common/   socket/subscribeToEvent.ts";
+import {SOCKET_EVENTS} from "@/common/constants/constants.ts";
 
 export const playlistsApi = baseApi.injectEndpoints({
     endpoints: build => ({
@@ -19,31 +21,22 @@ export const playlistsApi = baseApi.injectEndpoints({
                 // Ждем разрешения начального запроса перед продолжением
                 await cacheDataLoaded
 
-                // Создаем Socket.IO соединение с сервером
-                const socket: Socket = io('https://musicfun.it-incubator.app', {
-                    path: '/api/1.0/ws', // пользовательский путь для Socket.IO сервера (по умолчанию '/socket.io/')
-                    transports: ['websocket'],
-                })
-
-                socket.on('connect', () => console.log('✅ Подключен к серверу'))
-
-                socket.on('tracks.playlist-created', (msg: PlaylistCreatedEvent) => {
-                    // 1 вариант
-                    const newPlaylist = msg.payload.data
-                    updateCachedData(state => {
-                        state.data.pop()
-                        state.data.unshift(newPlaylist)
-                        state.meta.totalCount = state.meta.totalCount + 1
-                        state.meta.pagesCount = Math.ceil(state.meta.totalCount / state.meta.pageSize)
-                    })
-                    // 2 вариант
-                    // dispatch(playlistsApi.util.invalidateTags(['Playlist']))
-                })
+                const unsubscribe = subscribeToEvent<PlaylistCreatedEvent>(
+                    SOCKET_EVENTS.PLAYLIST_CREATED,
+                    msg => {
+                        const newPlaylist = msg.payload.data
+                        updateCachedData(state => {
+                            state.data.pop()
+                            state.data.unshift(newPlaylist)
+                            state.meta.totalCount = state.meta.totalCount + 1
+                            state.meta.pagesCount = Math.ceil(state.meta.totalCount / state.meta.pageSize)
+                        })
+                    }
+                )
 
                 // CacheEntryRemoved разрешится, когда подписка на кеш больше не активна
                 await cacheEntryRemoved
-                // Выполняем шаги очистки после разрешения промиса `cacheEntryRemoved`
-                socket.on('disconnect', () => console.log('❌ Соединение разорвано'))
+                unsubscribe()
             },
             providesTags: ['Playlist'],
         }),
