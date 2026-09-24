@@ -7,7 +7,6 @@ import {baseApi} from "@/app/baseApi.ts";
 import {playlistCreateResponseSchema, playlistsResponseSchema} from "@/features/playlists/model/playlists.schemas.ts";
 import {imagesSchema} from "@/common/schemas";
 import {withZodCatch} from "@/common/utils/withZodCatch.ts";
-import { io, type Socket } from 'socket.io-client'
 import {subscribeToEvent} from "@/common/   socket/subscribeToEvent.ts";
 import {SOCKET_EVENTS} from "@/common/constants/constants.ts";
 
@@ -50,7 +49,16 @@ export const playlistsApi = baseApi.injectEndpoints({
         }),
 
         createPlaylist: build.mutation({
-            query: (body: CreatePlaylistArgs) => ({ url: 'playlists', method: 'post', body }),
+            query: (body: CreatePlaylistArgs) => ({
+                url: 'playlists',
+                method: 'post',
+                body: {
+                    data: {
+                        type: 'playlists',
+                        attributes: body,
+                    },
+                },
+            }),
             ...withZodCatch(playlistCreateResponseSchema),
             invalidatesTags: ['Playlist'],
         }),

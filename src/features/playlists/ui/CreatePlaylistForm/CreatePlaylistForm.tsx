@@ -1,4 +1,4 @@
-/*...*/
+
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import s from './CreatePlaylistForm.module.css'
@@ -17,10 +17,13 @@ export const CreatePlaylistForm = () => {
         resolver: zodResolver(createPlaylistSchema),
     })
     const [createPlaylist] = useCreatePlaylistMutation()
-    const onSubmit: SubmitHandler<CreatePlaylistArgs> = data => {
-        createPlaylist(data).then(() => {
+    const onSubmit: SubmitHandler<CreatePlaylistArgs> = async data => {
+        try {
+            await createPlaylist(data).unwrap()
             reset()
-        })
+        } catch (error) {
+            console.error('Failed to create playlist:', error)
+        }
     }
 
     return (
