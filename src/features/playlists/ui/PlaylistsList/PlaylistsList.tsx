@@ -5,6 +5,7 @@ import {useDeletePlaylistMutation} from "@/features/playlists/api/playlistsApi.t
 import s from "./PlaylistsList.module.css"
 import {PlaylistItem} from "@/features/playlists/ui/PlaylistItem/PlaylistItem.tsx";
 import {EditPlaylistForm} from "@/features/playlists/ui/EditPlaylistForm/EditPlaylistForm.tsx";
+import {PlaylistSkeleton} from "@/features/playlists/ui/PlaylistSkeleton/PlaylistSkeleton.tsx";
 
 type Props = {
     playlists: PlaylistData[]
@@ -38,11 +39,23 @@ export const PlaylistsList = ({ playlists, isPlaylistsLoading }: Props) => {
     }
 
     return (
+        // <div className={s.items}>
+        //     {!playlists.length && !isPlaylistsLoading && <h2>Playlists not found</h2>}
+        //     {playlists.map(playlist => {
+        //         const isEditing = playlistId === playlist.id
         <div className={s.items}>
             {!playlists.length && !isPlaylistsLoading && <h2>Playlists not found</h2>}
+
+            {isPlaylistsLoading &&
+                Array.from({length: 2}).map((_, index) => (
+                    <div className={s.item} key={index}>
+                        <PlaylistSkeleton />
+                    </div>
+                ))
+            }
+
             {playlists.map(playlist => {
                 const isEditing = playlistId === playlist.id
-
                 return (
                     <div className={s.item} key={playlist.id}>
                         {isEditing ? (
