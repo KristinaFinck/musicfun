@@ -1,4 +1,4 @@
-import {LoginArgs, LoginResponse, MeResponse} from "@/features/auth/api/authApi.types.ts";
+import {LoginArgs} from "@/features/auth/api/authApi.types.ts";
 import {baseApi} from "@/app/baseApi.ts";
 import {AUTH_KEYS} from "@/common/constants/constants.ts";
 import {loginResponseSchema, meResponseSchema} from "@/features/auth/model/auth.schemas.ts";
@@ -8,13 +8,13 @@ import {withZodCatch} from "@/common/utils";
 export const authApi = baseApi.injectEndpoints({
     endpoints: build => ({
         getMe: build.query({
-            query: () => 'auth/me',
+            query: (_arg: void) => 'auth/me',
             ...withZodCatch(meResponseSchema),
             providesTags: ['Auth'],
         }),
 
         login: build.mutation({
-            query: payload => ({
+            query: (payload: LoginArgs) => ({
                 url: `auth/login`,
                 method: 'post',
                 body: { ...payload, accessTokenTTL: '15m'
@@ -37,8 +37,8 @@ export const authApi = baseApi.injectEndpoints({
             },
         }),
 
-        logout: build.mutation<void, void>({
-            query: () => {
+        logout: build.mutation({
+            query: (_arg: void) => {
                 const refreshToken = localStorage.getItem(AUTH_KEYS.refreshToken)
                 console.log('10. LOGOUT HAS TOKEN:', Boolean(refreshToken))
                 return { url: 'auth/logout', method: 'post', body: { refreshToken } }
@@ -50,7 +50,7 @@ export const authApi = baseApi.injectEndpoints({
                 localStorage.removeItem(AUTH_KEYS.accessToken)
                 localStorage.removeItem(AUTH_KEYS.refreshToken)
 
-                dispatch(baseApi.util.resetApiState())
+                dispatch(authApi.util.resetApiState())
             },
         }),
     }),

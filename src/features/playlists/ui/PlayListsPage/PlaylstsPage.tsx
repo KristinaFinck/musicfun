@@ -15,7 +15,7 @@ export const PlaylistsPage = () => {
     const [search, setSearch] = useState('')
     const debounceSearch = useDebounceValue(search)
 
-    const { data, isLoading, error, isError } = useFetchPlaylistsQuery({
+    const { data, isLoading, error } = useFetchPlaylistsQuery({
         search: debounceSearch,
         pageNumber: currentPage,
         pageSize,
