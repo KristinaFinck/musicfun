@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react-swc'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
+  base: '/musicfun/',
   plugins: [react()],
   resolve: {
     alias: {
